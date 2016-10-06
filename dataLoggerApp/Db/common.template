@@ -1,0 +1,65 @@
+record(stringin, "$(P):TIME:START"){
+  field(DESC, "Start date and time")
+  field(DTYP, "Soft Timestamp")
+  field(PINI, "YES")
+  field(INP,  "@%m/%d/%Y %H:%M:%S")
+}
+record(stringin, "$(P):TIME:CURRENT"){
+  field(DESC, "Current date and time")
+  field(DTYP, "Soft Timestamp")
+  field(SCAN, "1 second")
+  field(INP,  "@%m/%d/%Y %H:%M:%S")
+}
+record(stringin, "$(P):IOC"){
+  field(DESC, "$(DESC)")
+  field(PINI, "1")
+}
+#-----------------------------------------------------
+record(stringin, "$(P):MESSAGE"){
+  field(DESC, "Message from IOC")
+  field(DTYP, "asynOctetRead")
+  field(INP,  "@asyn($(PORT),0,1) MESSAGE")
+  field(SCAN, "I/O Intr")
+}
+record(bo, "$(P):RUN:STATE"){
+  field(DESC, "Run State")
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),0,1) RUN_STATE")
+  field(ZNAM, "Stop")
+  field(ONAM, "Start")
+}
+record(bi, "$(P):RUN:STATUS"){
+  field(DESC, "Run Status")
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),0,1) RUN_STATUS")
+  field(ZNAM, "Stopped")
+  field(ONAM, "Collecting data")
+  field(SCAN, "I/O Intr")
+}
+record(longin, "$(P):TRIG:COUNT"){
+  field(DESC, "Trigger count")
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),0,1) TRIG_CNT")
+  field(SCAN, "I/O Intr")
+}
+record(waveform, "$(P):COMMENT"){
+  field(DESC, "Comment")
+  field(DTYP, "asynOctetWrite")
+  field(INP,  "@asyn($(PORT),0,1) COMMENT")
+  field(FTVL, "CHAR")
+  field(NELM, "128")
+}
+record(waveform, "$(P):FILEPATH"){
+  field(DESC, "Data file path")
+  field(DTYP, "asynOctetWrite")
+  field(INP,  "@asyn($(PORT),0,1) FILEPATH")
+  field(FTVL, "CHAR")
+  field(NELM, "128")
+}
+record(stringin, "$(P):FILENAME"){
+  field(DESC, "Data file name")
+  field(DTYP, "asynOctetRead")
+  field(INP,  "@asyn($(PORT),0,1) FILENAME")
+  field(SCAN, "I/O Intr")
+}
+

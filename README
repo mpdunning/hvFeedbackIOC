@@ -1,0 +1,3 @@
+This IOC gathers data from various PVs via Channel Access and writes these
+data to a disk file.  This implementation is for the T523 ESTB experiment.
+The device driver is implemented as a subclass of the asynPortDriver class.

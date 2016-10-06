@@ -1,0 +1,30 @@
+
+# These are common records
+file common.template {
+    {None}
+}
+#------------------------------------------------------------------
+
+# This is the trigger PV
+file longRecord.template {
+pattern	
+    {     DESC,                        PVN,    USER}
+	{"Trigger", 13PS10:image1:UniqueId_RBV, TRIGGER}
+}
+#------------------------------------------------------------------
+
+# Below are Pvs to be logged
+file analogRecord.template {
+pattern	
+    {    DESC,                  PVN,             EGU,  USER}
+	{"Test 1", 13PS10:image1:UniqueId_RBV,      None, DATA0}
+	{"Test 2",  13PS10:cam1:ArrayRate_RBV,        Hz, DATA1}
+	{"Test 3",  13PS10:image1:ArrayCounter_RBV, None, DATA2}
+}
+
+#file binaryRecord.template {
+#pattern	
+#    {       DESC,                     PVN,  USER}
+#	{"drv State", ESA:RT02:GADC0:BI:STATE, ERROR}
+#}
+

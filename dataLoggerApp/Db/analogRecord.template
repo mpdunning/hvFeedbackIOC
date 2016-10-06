@@ -1,0 +1,21 @@
+# analogRecord.template
+#
+record(ai, "$(P):AI:$(USER)"){
+  field(DESC, "$(DESC):")
+  field(INP,  "$(PVN) CPP")
+  field(EGU,  "$(EGU)")
+  field(PREC, "2")
+  field(FLNK, "$(P):DFO:AO:$(USER)")
+}
+record(dfanout, "$(P):DFO:AO:$(USER)"){
+  field(DESC, "Move data")
+  field(DOL,  "$(P):AI:$(USER)")
+  field(OMSL, "closed_loop")
+  field(OUTA, "$(P):AO:$(USER) PP")
+}
+record(ao, "$(P):AO:$(USER)"){
+  field(DESC, "Push to driver")
+  field(DTYP, "asynFloat64")
+  field(EGU,  "$(EGU)")
+  field(OUT,  "@asyn($(PORT),0,1) $(USER)")
+}

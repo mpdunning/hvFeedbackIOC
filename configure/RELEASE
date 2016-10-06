@@ -1,0 +1,17 @@
+#RELEASE Location of external products
+#
+# IF YOU MAKE ANY CHANGES to this file you MUST at least run
+# "gnumake" in this directory afterwards; you usually need
+# to run "gnumake rebuild" in the application's top level
+# directory each time this file is changed.
+#------------------------------------------------------------------
+include $(TOP)/../../../RELEASE_SITE
+
+TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
+
+MODULES=$(EPICS_SITE_TOP)/modules
+
+AUTOSAVE=$(MODULES)/autosave/R5.7.1
+#UTILS=$(MODULES)/utils/R1.0
+ASYN=$(MODULES)/asyn/R4.29
+EPICS_BASE=$(EPICS_SITE_TOP)/base

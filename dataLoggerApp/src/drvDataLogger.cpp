@@ -32,7 +32,8 @@ drvDataLogger::drvDataLogger(const char* port, int npvs)
 	asynInt32Mask | asynOctetMask | asynFloat64Mask | asynDrvUserMask,
 	asynInt32Mask | asynOctetMask | asynFloat64Mask,
 	ASYN_CANBLOCK, // asyn Flags
-    1, 0, 0) // Autoconnect, Default priority, Default stack size 
+    1, 0, 0), // Autoconnect, Default priority, Default stack size 
+    npvs_(npvs)
 {
 
     //const char *functionName = "drvDataLogger";
@@ -40,6 +41,13 @@ drvDataLogger::drvDataLogger(const char* port, int npvs)
     createParam(data0Str,       asynParamFloat64,   &data0);
     createParam(data1Str,       asynParamFloat64,   &data1);
     createParam(data2Str,       asynParamFloat64,   &data2);
+    createParam(data3Str,       asynParamFloat64,   &data3);
+    createParam(data4Str,       asynParamFloat64,   &data4);
+    createParam(data5Str,       asynParamFloat64,   &data5);
+    createParam(data6Str,       asynParamFloat64,   &data6);
+    createParam(data7Str,       asynParamFloat64,   &data7);
+    createParam(data8Str,       asynParamFloat64,   &data8);
+    createParam(data9Str,       asynParamFloat64,   &data9);
     createParam(runStateStr,    asynParamInt32,     &runState);
     createParam(runStatusStr,   asynParamInt32,     &runStatus);
     createParam(triggerStr,     asynParamInt32,     &trigger);
@@ -49,6 +57,8 @@ drvDataLogger::drvDataLogger(const char* port, int npvs)
     createParam(commentStr,     asynParamOctet,     &comment);
     createParam(messageStr,     asynParamOctet,     &message);
 
+    data_ = new double [npvs_];
+
 }
 
 void drvDataLogger::_openFile() {
@@ -57,6 +67,7 @@ void drvDataLogger::_openFile() {
     char fname[64];
     char fullFilename[128];
     char fileExt[] = ".dat";
+    char commentBuf[128];
     
     epicsTimeGetCurrent(&timeStamp_);
     epicsTimeToStrftime(timeString_, sizeof(timeString_), "%Y%m%d_%H%M%S", &timeStamp_); 
@@ -76,7 +87,8 @@ void drvDataLogger::_openFile() {
         cout << driverName << "::" << functionName << ": Opened file:" << endl;
         cout << fullFilename << endl;
         setStringParam(message, "Opened file");
-        outfile_ << "Comment" << endl;
+        getStringParam(comment, sizeof(commentBuf), commentBuf);
+        outfile_ << commentBuf << endl;
         outfile_ << "================================================" << endl;
         setIntegerParam(runStatus, running_);
         setStringParam(filename, fname);
@@ -112,6 +124,8 @@ void drvDataLogger::_writeData() {
     //cout << timeStamp_.secPastEpoch << "." << timeStamp_.nsec << endl;
     epicsTimeToStrftime(timeString_, sizeof(timeString_), "%Y%m%d_%H%M%S.%06f", &timeStamp_); 
     //cout << timeString << endl;
+
+    cout << functionName << ": npvs_: " << npvs_ << endl;
     
     if (outfile_.is_open()) {
         outfile_ << timeString_ << " ";
@@ -182,13 +196,27 @@ asynStatus drvDataLogger::writeFloat64(asynUser *pasynUser, epicsFloat64 value) 
     cout << fixed;
     cout << driverName << "::" << functionName << ": function=" << function 
         << ", value=" << value << endl;
-    
+
     if (function == data0) {
         getDoubleParam(function, &data_[0]);
     } else if (function == data1) {
         getDoubleParam(function, &data_[1]);
     } else if (function == data2) {
         getDoubleParam(function, &data_[2]);
+    } else if (function == data3) {
+        getDoubleParam(function, &data_[3]);
+    } else if (function == data4) {
+        getDoubleParam(function, &data_[4]);
+    } else if (function == data5) {
+        getDoubleParam(function, &data_[5]);
+    } else if (function == data6) {
+        getDoubleParam(function, &data_[6]);
+    } else if (function == data7) {
+        getDoubleParam(function, &data_[7]);
+    } else if (function == data8) {
+        getDoubleParam(function, &data_[8]);
+    } else if (function == data9) {
+        getDoubleParam(function, &data_[9]);
     }
     
     status = (asynStatus)setDoubleParam(function, value);

@@ -9,6 +9,13 @@ drvDataLogger.h
 #define data0Str	    "DATA0" 
 #define data1Str	    "DATA1"	
 #define data2Str	    "DATA2"	
+#define data3Str	    "DATA3"	
+#define data4Str	    "DATA4"	
+#define data5Str	    "DATA5"	
+#define data6Str	    "DATA6"	
+#define data7Str	    "DATA7"	
+#define data8Str	    "DATA8"	
+#define data9Str	    "DATA9"	
 #define runStateStr	    "RUN_STATE"
 #define runStatusStr	"RUN_STATUS"
 #define triggerStr	    "TRIGGER"
@@ -26,11 +33,19 @@ public:
     virtual asynStatus writeInt32(asynUser* pasynUser, epicsInt32 value);
     virtual asynStatus writeFloat64(asynUser* pasynUser, epicsFloat64 value);
     //virtual asynStatus getTimeStamp(epicsTimeStamp *pTimeStamp);
+    ~drvDataLogger() {delete [] data_;}
 
 protected:
     int data0;
     int data1;
     int data2;
+    int data3;
+    int data4;
+    int data5;
+    int data6;
+    int data7;
+    int data8;
+    int data9;
     int runState;
     int runStatus;
     int trigger;
@@ -48,8 +63,10 @@ private:
     void _openFile();
     void _closeFile();
     void _writeData();
-    static const int npvs_ = 3;
-    double data_[npvs_];
+    //static const int npvs_ = 3;
+    int npvs_;
+    //double data_[npvs_];
+    double *data_;
     int running_;
     std::ofstream outfile_;
     epicsTimeStamp timeStamp_;

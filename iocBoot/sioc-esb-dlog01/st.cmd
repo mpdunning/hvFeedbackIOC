@@ -14,7 +14,7 @@ dataLogger_registerRecordDeviceDriver(pdbbase)
 
 # drvDataLoggerConfig(char* port, int npvs)
 #-----------------------------------------------------
-drvDataLoggerConfig("$(PORT)", "9")
+drvDataLoggerConfig("$(PORT)", "3")
 
 #asynSetTraceMask("$(PORT)", -1, 0x0f)
 #asynSetTraceIOMask("$(PORT)", -1, 0x6)

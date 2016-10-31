@@ -28,11 +28,9 @@ drvDataLogger.h
 class drvDataLogger : public asynPortDriver {
 public:
     drvDataLogger(const char* port, int npvs);
-    //virtual asynStatus readInt32(asynUser* pasynUser, epicsInt32* value);
     virtual asynStatus writeOctet(asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual);
     virtual asynStatus writeInt32(asynUser* pasynUser, epicsInt32 value);
     virtual asynStatus writeFloat64(asynUser* pasynUser, epicsFloat64 value);
-    //virtual asynStatus getTimeStamp(epicsTimeStamp *pTimeStamp);
     ~drvDataLogger() {delete [] data_;}
 
 protected:
@@ -46,6 +44,7 @@ protected:
     int data7;
     int data8;
     int data9;
+    static const int N_DATA_MAX = 10; // Max number of sampled PVs
     int runState;
     int runStatus;
     int trigger;
@@ -63,15 +62,14 @@ private:
     void _openFile();
     void _closeFile();
     void _writeData();
-    //static const int npvs_ = 3;
     int npvs_;
-    //double data_[npvs_];
     double *data_;
     int running_;
     std::ofstream outfile_;
     epicsTimeStamp timeStamp_;
     char timeString_[80];
     char filepath_[128];
+    char comment_[128];
     int triggerCount_;
 };
 

@@ -26,3 +26,4 @@ iocInit()
 
 epicsThreadSleep(1)
 dbpf "$(P):FILEPATH" "/nfs/slac/g/nlcta/u01/nlcta/pvLog/test/"
+dbpf "$(P):COMMENT" "Comment"

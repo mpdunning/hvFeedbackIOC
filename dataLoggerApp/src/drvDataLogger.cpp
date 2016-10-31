@@ -3,27 +3,17 @@ drvDataLogger.cpp
 */
 
 #include <iostream>     // std::cout
-
-//#include <cstdlib>
 #include <cstring>
-//#include <stdio.h>
-//#include <sys/stat.h>
-//#include <fcntl.h>
-//#include <unistd.h>
-//#include <errno.h>
-
 #include <epicsTime.h>
 #include <epicsThread.h>
-//#include <cantProceed.h>
-//#include <initHooks.h>
 #include <epicsExport.h>
-//#include <errlog.h>
 #include <iocsh.h>
 
 
 #include "drvDataLogger.h"
 
 static const char* driverName="drvDataLogger";
+int DEBUG = 0;
 
 
 // Constructor for the drvDataLogger class
@@ -58,12 +48,12 @@ drvDataLogger::drvDataLogger(const char* port, int npvs)
     createParam(messageStr,     asynParamOctet,     &message);
 
     data_ = new double [npvs_];
-
 }
 
 void drvDataLogger::_openFile() {
     const char *functionName = "_openFile";
-    using namespace std;
+    using std::cout;
+    using std::endl;
     char fname[64];
     char fullFilename[128];
     char fileExt[] = ".dat";
@@ -75,20 +65,26 @@ void drvDataLogger::_openFile() {
     strncpy(fname, timeString_, sizeof(fname));
     fname[sizeof(fname) - 1] = '\0';
     strncat(fname, fileExt, sizeof(fileExt));
+    // Check for trailing slash, if not, append it
+    if (filepath_[strlen(filepath_)-1] != '/') {
+        strcat(filepath_, "/");
+    }
     strncpy(fullFilename, filepath_, sizeof(fullFilename)); 
     fullFilename[sizeof(fullFilename) - 1] = '\0';
     strncat(fullFilename, fname, sizeof(fname));
+    
     outfile_.open(fullFilename);
    
     triggerCount_ = 0;
     setIntegerParam(trigCnt, triggerCount_);
     
     if (outfile_.is_open()) {
-        cout << driverName << "::" << functionName << ": Opened file:" << endl;
-        cout << fullFilename << endl;
+        if (DEBUG) {
+            cout << driverName << "::" << functionName << ": Opened file:" << endl;
+            cout << fullFilename << endl;
+        }
         setStringParam(message, "Opened file");
-        getStringParam(comment, sizeof(commentBuf), commentBuf);
-        outfile_ << commentBuf << endl;
+        outfile_ << comment_ << endl;
         outfile_ << "================================================" << endl;
         setIntegerParam(runStatus, running_);
         setStringParam(filename, fname);
@@ -109,7 +105,9 @@ void drvDataLogger::_closeFile() {
         setStringParam(message, "Closed file");
     }
     if (!outfile_.is_open()) {
-        cout << driverName << "::" << functionName << ": File closed." << endl;
+        if (DEBUG) {
+            cout << driverName << "::" << functionName << ": File closed." << endl;
+        }
         setIntegerParam(runStatus, running_);
     }
     callParamCallbacks();
@@ -118,19 +116,14 @@ void drvDataLogger::_closeFile() {
 void drvDataLogger::_writeData() {
     const char *functionName = "_writeData";
     using namespace std;
-    int i;
 
     epicsTimeGetCurrent(&timeStamp_);
-    //cout << timeStamp_.secPastEpoch << "." << timeStamp_.nsec << endl;
     epicsTimeToStrftime(timeString_, sizeof(timeString_), "%Y%m%d_%H%M%S.%06f", &timeStamp_); 
-    //cout << timeString << endl;
 
-    cout << functionName << ": npvs_: " << npvs_ << endl;
-    
     if (outfile_.is_open()) {
         outfile_ << timeString_ << " ";
         outfile_ << fixed;
-        for (i=0; i<npvs_; i++) {
+        for (int i=0; i<npvs_; i++) {
             outfile_ << data_[i] << " ";
         }
         outfile_ << endl;
@@ -151,7 +144,9 @@ asynStatus drvDataLogger::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     
     if (function == runState) {
         getIntegerParam(runState, &running_);
-        cout << driverName << "::" << functionName << ": running_=" << running_ << endl;
+        if (DEBUG) {
+            cout << driverName << "::" << functionName << ": running_=" << running_ << endl;
+        }
         if (running_ && !outfile_.is_open()) {
             _openFile();
         } else if (!running_ && outfile_.is_open()) {
@@ -163,7 +158,10 @@ asynStatus drvDataLogger::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         if (running_ && outfile_.is_open()) {
             _writeData();
             ++triggerCount_;
-            cout << driverName << "::" << functionName << ": Got trigger, trig cnt=" << triggerCount_ << endl;
+            if (DEBUG) {
+                cout << driverName << "::" << functionName << ": Got trigger, trig cnt=" 
+                << triggerCount_ << endl;
+            }
             setIntegerParam(trigCnt, triggerCount_);
         } 
     }
@@ -194,31 +192,13 @@ asynStatus drvDataLogger::writeFloat64(asynUser *pasynUser, epicsFloat64 value) 
     status = (asynStatus)setDoubleParam(function, value);
 
     cout << fixed;
-    cout << driverName << "::" << functionName << ": function=" << function 
-        << ", value=" << value << endl;
+    //cout << driverName << "::" << functionName << ": function=" << function 
+    //    << ", value=" << value << endl;
 
-    if (function == data0) {
-        getDoubleParam(function, &data_[0]);
-    } else if (function == data1) {
-        getDoubleParam(function, &data_[1]);
-    } else if (function == data2) {
-        getDoubleParam(function, &data_[2]);
-    } else if (function == data3) {
-        getDoubleParam(function, &data_[3]);
-    } else if (function == data4) {
-        getDoubleParam(function, &data_[4]);
-    } else if (function == data5) {
-        getDoubleParam(function, &data_[5]);
-    } else if (function == data6) {
-        getDoubleParam(function, &data_[6]);
-    } else if (function == data7) {
-        getDoubleParam(function, &data_[7]);
-    } else if (function == data8) {
-        getDoubleParam(function, &data_[8]);
-    } else if (function == data9) {
-        getDoubleParam(function, &data_[9]);
+    if (function < N_DATA_MAX) {
+        getDoubleParam(function, &data_[function]);
     }
-    
+
     status = (asynStatus)setDoubleParam(function, value);
     status = (asynStatus)callParamCallbacks();
     
@@ -246,6 +226,9 @@ asynStatus drvDataLogger::writeOctet(asynUser *pasynUser, const char *value, siz
     
     if (function == filepath) {
         strcpy(filepath_, value);
+        *nActual = nChars;
+    } else if (function == comment) {
+        strcpy(comment_, value);
         *nActual = nChars;
     } else {
         /* All other parameters just get set in parameter list, no need to

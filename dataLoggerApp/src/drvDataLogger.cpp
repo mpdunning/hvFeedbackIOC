@@ -57,7 +57,6 @@ void drvDataLogger::_openFile() {
     char fname[64];
     char fullFilename[128];
     char fileExt[] = ".dat";
-    char commentBuf[128];
     
     epicsTimeGetCurrent(&timeStamp_);
     epicsTimeToStrftime(timeString_, sizeof(timeString_), "%Y%m%d_%H%M%S", &timeStamp_); 

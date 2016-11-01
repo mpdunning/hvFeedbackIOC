@@ -16,7 +16,6 @@ dataLogger_SRCS_DEFAULT += dataLoggerMain.cpp
 
 dataLogger_LIBS += asyn
 dataLogger_LIBS += autosave
-#dataLogger_LIBS += utils
 
 dataLogger_LIBS += $(EPICS_BASE_IOC_LIBS)
 

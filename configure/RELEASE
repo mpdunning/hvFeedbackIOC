@@ -12,6 +12,6 @@ TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
 MODULES=$(EPICS_SITE_TOP)/modules
 
 AUTOSAVE=$(MODULES)/autosave/R5.7.1
-#UTILS=$(MODULES)/utils/R1.0
 ASYN=$(MODULES)/asyn/R4.29
+
 EPICS_BASE=$(EPICS_SITE_TOP)/base

@@ -23,8 +23,9 @@
 #include "drvHvfb.h"
 #include <epicsExport.h>
 
-#define MIN_UPDATE_TIME 0.02 /* Minimum update time, to prevent CPU saturation */
-#define MIN_INT_TIME 1    /* Minimum integration time */
+const double MIN_UPDATE_TIME = 0.02; /* Minimum update time, to prevent CPU saturation */
+const int MIN_INT_TIME = 1;    /* Minimum integration time */
+const int DEBUG = 0;
 
 static const char *driverName="drvHvfb";
 void feedbackTask(void *drvPvt);
@@ -102,11 +103,7 @@ void feedbackTask(void *drvPvt)
     pPvt->feedbackTask();
 }
 
-/** Feedback task that runs as a separate thread.  When the P_Run parameter is set to 1
-  * to rub the simulation it computes a 1 kHz sine wave with 1V amplitude and user-controllable
-  * noise, and displays it on
-  * a simulated scope.  It computes waveforms for the X (time) and Y (volt) axes, and computes
-  * statistics about the waveform. */
+// Feedback task that runs as a separate thread.
 void drvHvfb::feedbackTask(void)
 {
     /* This thread computes the waveform and does callbacks with it */
@@ -155,13 +152,13 @@ void drvHvfb::feedbackTask(void)
             setDoubleParam(P_OutVal, nom);
         }
 
-        /*
-        cout << "ave=" << ave << ", ";
-        cout << "cFact=" << cFact << ", ";
-        cout << "last=" << last << ", ";
-        cout << "diff=" << diff << ", ";
-        cout << "delta=" << delta << endl;
-        */
+        /*if (DEBUG) {
+            cout << "ave=" << ave << ", ";
+            cout << "cFact=" << cFact << ", ";
+            cout << "last=" << last << ", ";
+            cout << "diff=" << diff << ", ";
+            cout << "delta=" << delta << endl;
+        }*/
 
         setDoubleParam(P_Ave, ave);
         setDoubleParam(P_Diff, diff);
@@ -185,11 +182,18 @@ double drvHvfb::_timedAverage(int intTime) {
         act = inpVal_;
         sum += act;
         epicsThreadSleep(1);
-        //cout << functionName << ": act=" << act << ", time= " << time << ", sum=" << sum << endl;
+    
+        /*if (DEBUG) {
+            cout << functionName << ": act=" << act << ", time= " << time << ", sum=" << sum << endl;
+        }*/
     }
     
     ave = sum/time;
-    //cout << functionName << ": ave=" << ave << endl;
+   
+    /*if (DEBUG) {
+        cout << functionName << ": ave=" << ave << endl;
+    }*/
+    
     return ave;
 }
 

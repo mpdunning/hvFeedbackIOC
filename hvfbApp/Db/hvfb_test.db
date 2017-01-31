@@ -1,0 +1,301 @@
+record(stringout, "$(P):IOC") {
+    field(DESC, "$(DESC)")
+    field(VAL,  "$(IOC)")
+}
+
+###################################################################
+#  Run/Stop
+###################################################################
+record(bo, "$(P):RUN")
+{
+     field(PINI,  "1")
+     field(DTYP, "asynInt32")
+     field(OUT,  "@asyn($(PORT),0,1)RUN")
+     field(ZNAM, "Stop")
+     field(ONAM, "Run")
+}
+
+record(bi, "$(P):RUN_RBV")
+{
+     field(PINI, "1")
+     field(DTYP, "asynInt32")
+     field(INP,  "@asyn($(PORT),0,1)RUN")
+     field(ZNAM, "Stopped")
+     field(ONAM, "Running")
+     field(ZSV,  "NO_ALARM")
+     field(OSV,  "MINOR")
+     field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Update time
+###################################################################
+record(ao, "$(P):UPDATE_TIME")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),0,1)UPDATE_TIME")
+    field(PREC, "3")
+    field(EGU,  "s")
+}
+
+record(ai, "$(P):UPDATE_TIME_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)UPDATE_TIME")
+    field(PREC, "3")
+    field(EGU,  "s")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Integration time
+###################################################################
+
+record(longout, "$(P):INT_TIME")
+{
+    field(PINI, "1")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),0,1)INT_TIME")
+    field(EGU,  "s")
+}
+
+record(longin, "$(P):INT_TIME_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT),0,1)INT_TIME")
+    field(EGU,  "s")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Desired voltage
+###################################################################
+record(ao, "$(P):VDES")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),0,1)VDES")
+    field(EGU,  "kV")
+    field(PREC, "5")
+}
+
+record(ai, "$(P):VDES_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)VDES")
+    field(EGU,  "kV")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Max voltage
+###################################################################
+record(ao, "$(P):VMAX")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),0,1)VMAX")
+    field(EGU,  "kV")
+    field(PREC, "5")
+}
+
+record(ai, "$(P):VMAX_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)VMAX")
+    field(EGU,  "kV")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Smoothing
+###################################################################
+record(ao, "$(P):SMOOTHING")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),0,1)SMOOTHING")
+    field(PREC, "3")
+}
+
+record(ai, "$(P):SMOOTHING_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)SMOOTHING")
+    field(PREC, "3")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Correction factor
+###################################################################
+record(ao, "$(P):CFACT")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),0,1)CFACT")
+    field(PREC, "5")
+}
+
+record(ai, "$(P):CFACT_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)CFACT")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Last average
+###################################################################
+record(ai, "$(P):AVE_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)AVE")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Last diff
+###################################################################
+record(ai, "$(P):DIFF_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)DIFF")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Last delta
+###################################################################
+record(ai, "$(P):DELTA_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)DELTA")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Last value
+###################################################################
+record(ai, "$(P):LAST_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)LAST")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Last correction
+###################################################################
+record(ai, "$(P):CORRECTION_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)CORRECTION")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Input value 
+###################################################################
+record(ao, "$(P):INP_VAL")
+{
+    field(PINI, "1")
+    field(DOL,  "$(INPUT_PV) CPP")
+    field(OMSL, "closed_loop")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),0,1)INP_VAL")
+    field(PREC, "5")
+}
+
+###################################################################
+#  Nominal output value (set by user) 
+###################################################################
+record(ao, "$(P):OUT_NOM")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),0,1)OUT_NOM")
+    field(PREC, "5")
+}
+
+record(ai, "$(P):OUT_NOM_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)OUT_NOM")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+###################################################################
+#  Current output value 
+###################################################################
+record(ao, "$(P):OUT_VAL_LAST")
+{
+    field(PINI, "1")
+    field(DOL,  "$(OUTPUT_PV) CPP")
+    field(OMSL, "closed_loop")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),0,1)OUT_VAL_LAST")
+    field(PREC, "5")
+}
+
+###################################################################
+#  Output value from driver
+###################################################################
+record(ai, "$(P):OUT_VAL_RBV")
+{
+    field(PINI, "1")
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),0,1)OUT_VAL")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+    field(FLNK, "$(P):OUT_CALC")
+}
+
+###################################################################
+#  Push output to record
+###################################################################
+record(calcout, "$(P):OUT_CALC")
+{
+    field(INPA, "$(P):OUT_VAL_RBV")
+    field(OUT,  "$(OUTPUT_PV) CP")
+    field(CALC, "A")
+    field(PREC, "5")
+}
+
+###################################################################
+#  Testing...
+###################################################################
+record(calcout, "$(P):CORR")
+{
+    field(INPA, "ESB:GP01:VAL04 CPP")
+    field(INPB, "-88")
+    field(CALC, "A*B")
+    field(OUT,  "ESB:GP01:VAL03 PP")
+}
+
+
+
+
+
+

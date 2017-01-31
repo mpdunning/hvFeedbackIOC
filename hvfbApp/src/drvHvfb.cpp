@@ -99,7 +99,6 @@ drvHvfb::drvHvfb(const char *portName)
 void feedbackTask(void *drvPvt)
 {
     drvHvfb *pPvt = (drvHvfb *)drvPvt;
-    
     pPvt->feedbackTask();
 }
 
@@ -152,13 +151,13 @@ void drvHvfb::feedbackTask(void)
             setDoubleParam(P_OutVal, nom);
         }
 
-        /*if (DEBUG) {
+        if (DEBUG) {
             cout << "ave=" << ave << ", ";
             cout << "cFact=" << cFact << ", ";
             cout << "last=" << last << ", ";
             cout << "diff=" << diff << ", ";
             cout << "delta=" << delta << endl;
-        }*/
+        }
 
         setDoubleParam(P_Ave, ave);
         setDoubleParam(P_Diff, diff);
@@ -183,16 +182,16 @@ double drvHvfb::_timedAverage(int intTime) {
         sum += act;
         epicsThreadSleep(1);
     
-        /*if (DEBUG) {
+        if (DEBUG) {
             cout << functionName << ": act=" << act << ", time= " << time << ", sum=" << sum << endl;
-        }*/
+        }
     }
     
     ave = sum/time;
    
-    /*if (DEBUG) {
+    if (DEBUG) {
         cout << functionName << ": ave=" << ave << endl;
-    }*/
+    }
     
     return ave;
 }

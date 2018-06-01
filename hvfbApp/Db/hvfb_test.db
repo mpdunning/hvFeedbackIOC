@@ -288,10 +288,12 @@ record(calcout, "$(P):OUT_CALC")
 ###################################################################
 record(calcout, "$(P):CORR")
 {
-    field(INPA, "ESB:GP01:VAL04 CPP")
+    field(INPA, "$(OUTPUT_PV) CPP")
     field(INPB, "-88")
     field(CALC, "A*B")
-    field(OUT,  "ESB:GP01:VAL03 PP")
+    field(OUT,  "$(INPUT_PV) PP")
+    field(SDIS, "$(P):RUN CPP")
+    field(DISV, "0")
 }
 
 

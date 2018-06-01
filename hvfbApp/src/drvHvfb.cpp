@@ -82,7 +82,6 @@ drvHvfb::drvHvfb(const char *portName)
     setDoubleParam(P_Delta,              0.0);
     setDoubleParam(P_Last,               0.0);
     setDoubleParam(P_Correction,         0.0);
-    setDoubleParam(P_OutVal,             0.0);
     
     /* Create the feedback thread in the background */
     status = (asynStatus)(epicsThreadCreate("drvHvfbTask",
